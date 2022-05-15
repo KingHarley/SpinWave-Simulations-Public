@@ -1518,11 +1518,11 @@ def create_JJI_E2_vec_dist(Gout, ww):
 
 	return E2				# Changed (removed minus V=El)
 
-def create_JJI_B0_vec(eigVecs, Diag, E2):
+def create_JJI_B0_vec(eigVecs, Diag, EE):
 	B0 = numpy.zeros(5, dtype = numpy.complex128)
 	last_vec = numpy.zeros(5, dtype = numpy.complex128)
-	last_vec[3] = (E2[1] - E2[0])							# changed to +
-	last_vec[4] = (E2[2] - E2[0])							# changed to +
+	last_vec[3] = (EE[1] - EE[0])							# changed to +
+	last_vec[4] = (EE[2] - EE[0])							# changed to +
 	B0 = numpy.dot(numpy.dot(numpy.dot(eigVecs,Diag), numpy.linalg.inv(eigVecs)), last_vec)
 	return B0
 
@@ -1626,15 +1626,16 @@ def JJI(H, w, Ycss):
 	vec_JJI_B2 = update_JJI_B2_vec(vec_JJI_B2)
 	vec_JJI_wx = numpy.linalg.solve(matrix_JJI_A, vec_JJI_B2)
 	vec_JJI_Ix = create_JJI_Ix_vec(vec_JJI_wx)
-	vec_JJI_E2 = create_JJI_E2_vec(matrix_JJI_Gout, vec_JJI_ww2)						# Electric field in output antenna, indices correspond to signal, and 2 ground lines of antenna
+
+	vec_JJI_EE = numpy.dot(matrix_JJI_ZZ, vec_JJI_Ix)						# Electric field in output antenna, indices correspond to signal, and 2 ground lines of antenna
 	matrix_JJI_Diag = create_JJI_Diag_matrix(vec_eigAL)
-	vec_JJI_B0 = create_JJI_B0_vec(vec_eigVecAL, matrix_JJI_Diag, vec_JJI_E2)
+	vec_JJI_B0 = create_JJI_B0_vec(vec_eigVecAL, matrix_JJI_Diag, vec_JJI_EE)
 	matrix_JJI_C = create_JJI_C_matrix(vec_eigAL, vec_eigVecAL)
 	vec_JJI_F = create_JJI_F_vec(vec_JJI_B0)
 	var_JJI_b = numpy.dot(numpy.linalg.inv(matrix_JJI_C), vec_JJI_F)
 	vec_JJI_Iout = create_JJI_Iout_vec(vec_eigAL, vec_eigVecAL, var_JJI_b, vec_JJI_B0)
 	var_JJI_Vout = create_JJI_Vout_var(vec_eigAL, vec_eigVecAL, var_JJI_b, vec_JJI_B0)
-	vec_JJI_Z = create_JJI_Z_vec(var_JJI_gamma, vec_JJI_E2, vec_JJI_Iout, var_JJI_Vout, var_JJI_ZL_one, var_JJI_ZL_two, var_JJI_J4average, w, vec_JJI_Iaverage, vec_JJI_Ic)
+	vec_JJI_Z = create_JJI_Z_vec(var_JJI_gamma, vec_JJI_EE, vec_JJI_Iout, var_JJI_Vout, var_JJI_ZL_one, var_JJI_ZL_two, var_JJI_J4average, w, vec_JJI_Iaverage, vec_JJI_Ic)
 	
 	#print(numpy.shape(vec_JJI_ww2), pts_total)
 	print("Frequency: ", numpy.real(w/(2*numpy.pi)))
