@@ -1674,6 +1674,7 @@ def JJI_ww_single(H, w, Ycss):
 	return vecs_JJI_ww     #this is the extra JJI that returns the current density in a single strip earlier in code
 
 
+#test function
 def JJI_E2_distribution_outantenna(H, w, Ycss):
 	var_time = time.time()
 	var_delH = del_H(w)
@@ -2049,7 +2050,7 @@ def sim_varying_args(dir, Ycss, lowB, upB, pts, arg, **kwargs):
 	return 0
 
 def main():
-	directory = '/home/mumax/Documents/Charles/SpinWave_Simulations_updated/Python Simulation Results/SignCorrection20220412'
+	directory = '/home/mumax/Documents/Charles/SpinWave-Simulations-Public/Python Simulation Results/Corrections20220515'
 	print("Start: antennaCalcs()")
 	var_time = time.time()
 	var_Ycss = antennaCalcs()
