@@ -56,7 +56,7 @@ var_zc = 50
 #Frequency range to test with Simulation
 freq_lower = 2 * numpy.pi * 7 * 10 ** 9
 freq_upper = 2 * numpy.pi * 18 * 10 ** 9
-plot_pts_num = 100
+plot_pts_num = 2
 if plot_pts_num > 1:
 	freq_step = (freq_upper - freq_lower) / (plot_pts_num -1)
 else:
@@ -65,7 +65,7 @@ else:
 
 #Independent Variables
 centralFreq = numpy.pi * (2 * 15 * 10 ** 9)
-appliedH =	3000 * 1.02 * 79.57747		#1083.24 * 79.57747
+appliedH =	600 * 1.02 * 79.57747		#1083.24 * 79.57747
 linewidthSlope = 5.66352 * 10 ** -9 * 79.57747 / (2*numpy.pi)
 broadening = 7.96526 * 79.57747
 gamma = 2 * numpy.pi * 2.87 * 10 ** 10 * 4 * numpy.pi * 10 ** -7#2 * numpy.pi * 3 * 10 ** 10 * 4 * numpy.pi * 10 ** -7
@@ -1623,7 +1623,7 @@ def JJI(H, w, Ycss):
 	vec_JJI_xi = create_xi_vec()
 	vec_JJI_xj = create_xj_vec()
 	matrix_JJI_Gout = create_JJI_Gout_matrix(H, var_delH, vec_JJI_xj, vec_JJI_xi, w)
-	vec_JJI_B2 = update_JJI_B2_vec(vec_JJI_B2)
+	vec_JJI_B2 = update_JJI_B2_vec(vec_JJI_B2, matrix_JJI_Gout, vec_JJI_ww2)
 	vec_JJI_wx = numpy.linalg.solve(matrix_JJI_A, vec_JJI_B2)
 	vec_JJI_Ix = create_JJI_Ix_vec(vec_JJI_wx)
 
@@ -2055,7 +2055,7 @@ def main():
 	var_time = time.time()
 	var_Ycss = antennaCalcs()
 	print(var_Ycss)
-	average_simulation_time = sim_varying_args(directory, var_Ycss,	-2.464 * 10 ** -6, +2.464 * 10 ** -6, 2, 'distance_Antennas', id="Default_params_corrected_checks_ref")
+	average_simulation_time = sim_varying_args(directory, var_Ycss,	-2.464 * 10 ** -6, +2.464 * 10 ** -6, 2, 'distance_Antennas', id="600Oe_corrected_20220515")
 	total_time = time.time() - var_time
 	numpy.savetxt(os.path.join(directory, "times.csv"), numpy.array(((average_simulation_time, total_time),)), delimiter = ",", header = "Average Simulation Time, Total Time")
 
