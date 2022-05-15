@@ -1475,6 +1475,13 @@ def update_JJI_B2_vec(B2, Gout, ww):
 		B2[i] = del_width * (numpy.sum(Goutww))
 	return B2;
 
+def create_JJI_Ix_vec(wx):
+	Ix = numpy.zeros(3, dtype = numpy.complex)
+	Ix[0] = del_width * (numpy.sum(wx[pts_ground:pts_ground + pts_signal - 1]))
+	Ix[1] = del_width * (numpy.sum(wx[0:pts_ground - 1]))
+	Ix[2] = del_width * (numpy.sum(wx[pts_ground + pts_signal : pts_total -1]))
+	return Ix
+
 def create_JJI_Diag_matrix(eigVals):
 	Diag = numpy.zeros((5,5), dtype = numpy.complex128)
 	for i in range(5):
@@ -1617,6 +1624,8 @@ def JJI(H, w, Ycss):
 	vec_JJI_xj = create_xj_vec()
 	matrix_JJI_Gout = create_JJI_Gout_matrix(H, var_delH, vec_JJI_xj, vec_JJI_xi, w)
 	vec_JJI_B2 = update_JJI_B2_vec(vec_JJI_B2)
+	vec_JJI_wx = numpy.linalg.solve(matrix_JJI_A, vec_JJI_B2)
+	vec_JJI_Ix = create_JJI_Ix_vec(vec_JJI_wx)
 	vec_JJI_E2 = create_JJI_E2_vec(matrix_JJI_Gout, vec_JJI_ww2)						# Electric field in output antenna, indices correspond to signal, and 2 ground lines of antenna
 	matrix_JJI_Diag = create_JJI_Diag_matrix(vec_eigAL)
 	vec_JJI_B0 = create_JJI_B0_vec(vec_eigVecAL, matrix_JJI_Diag, vec_JJI_E2)
