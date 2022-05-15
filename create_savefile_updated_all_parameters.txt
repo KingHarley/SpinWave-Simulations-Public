@@ -1,0 +1,25 @@
+def create_savefile(filename, result_matrix, frequencies):
+	matrix = numpy.zeros((len(frequencies), 49), dtype = numpy.float64)
+	for i in range(len(frequencies)):
+		#This was how we had it originally
+		matrix[i,0] = frequencies[i] / (2 * numpy.pi)
+		#matrix[i,1] = numpy.real(result_matrix[i][7])
+		#matrix[i,2] = numpy.imag(result_matrix[i][7])
+		#matrix[i,3] = numpy.real(result_matrix[i][0])
+		#matrix[i,4] = numpy.imag(result_matrix[i][0])
+		#matrix[i,5] = numpy.absolute(result_matrix[i][7])
+		#matrix[i,6] = numpy.absolute(result_matrix[i][0])
+		#matrix[i,7] = numpy.angle(result_matrix[i][7])
+		#matrix[i,8] = numpy.angle(result_matrix[i][0])
+
+		#We will now save all of the results not just the S parameter
+		for j in range(len(result_matrix[0])):
+			matrix[i,j+1] = numpy.real(result_matrix[i][j])
+			matrix[i,j+2] = numpy.imag(result_matrix[i][j])
+			matrix[i,j+3] = numpy.absolute(result_matrix[i][j])
+			matrix[i,j+4] = numpy.angle(result_matrix[i][j])
+		
+		
+	numpy.savetxt(filename + ".csv", matrix, header = "Frequency, Real(S11), Imag(S11), Amp(S11), Phase(S11), Real(E0), Imag(E0), Amp(E0), Phase(E0), Real(E1), Imag(E1), Amp(E1), Phase(E1), Real(E2), Imag(E2), Amp(E2), Phase(E2), Real(I0), Imag(I0), Amp(I0), Phase(I0), Real(I1), Imag(I1), Amp(I1), Phase(I1), Real(I2), Imag(I2), Amp(I2), Phase(I2), Real(S21), Imag(S21), Amp(S21), Phase(S21), Real(ZL1), Imag(ZL1), Amp(ZL1), Phase(ZL1), Real(ZL2), Imag(ZL2), Amp(ZL2), Phase(ZL2), Real(J4avg), Imag(J4avg), Amp(J4avg), Phase(J4avg), Real(Icavg), Imag(Icavg), Amp(Icavg), Phase(Icavg) ", delimiter=',')
+	numpy.savetxt(filename + "_vars.txt", create_global_vars_matrix(), fmt = "%s")
+	return 0
