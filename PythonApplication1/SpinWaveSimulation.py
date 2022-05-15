@@ -1467,6 +1467,14 @@ def create_JJI_Gout_vec(H, delH, xin, xout, w):
 		Gout[i] = eG(H + delH, numpy.absolute(xout-xin[i]), w)
 	return Gout
 
+def update_JJI_B2_vec(B2, Gout, ww):
+	for i in range(pts_total):
+		Goutww = numpy.zeros(pts_total, dtype = numpy.complex)
+		for j in range(pts_total):
+			Goutww[j] = Gout[i, j] * ww[j]
+		B2[i] = del_width * (numpy.sum(Goutww))
+	return B2;
+
 def create_JJI_Diag_matrix(eigVals):
 	Diag = numpy.zeros((5,5), dtype = numpy.complex128)
 	for i in range(5):
@@ -1608,7 +1616,7 @@ def JJI(H, w, Ycss):
 	vec_JJI_xi = create_xi_vec()
 	vec_JJI_xj = create_xj_vec()
 	matrix_JJI_Gout = create_JJI_Gout_matrix(H, var_delH, vec_JJI_xj, vec_JJI_xi, w)
-
+	vec_JJI_B2 = update_JJI_B2_vec(vec_JJI_B2)
 	vec_JJI_E2 = create_JJI_E2_vec(matrix_JJI_Gout, vec_JJI_ww2)						# Electric field in output antenna, indices correspond to signal, and 2 ground lines of antenna
 	matrix_JJI_Diag = create_JJI_Diag_matrix(vec_eigAL)
 	vec_JJI_B0 = create_JJI_B0_vec(vec_eigVecAL, matrix_JJI_Diag, vec_JJI_E2)
