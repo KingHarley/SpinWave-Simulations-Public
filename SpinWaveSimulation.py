@@ -1248,10 +1248,10 @@ def create_JJI_AL_matrix(Y11, matrix_Z):
 	AL[4,1] = -(matrix_Z[0,1] - matrix_Z[2,1])
 	AL[3,2] = matrix_Z[1,2] - matrix_Z[0,2]
 	AL[4,2] = var_R2*0 - matrix_Z[0,2] + matrix_Z[2,2]
-	AL[0,3] = -Y11
-	AL[1,3] = Y11				# changed to +ve sign
-	AL[0,4] = -Y11
-	AL[2,4] = Y11				# changed to +ve sign
+	AL[0,3] = -Y11/2
+	AL[1,3] = Y11/2				# changed to +ve sign
+	AL[0,4] = -Y11/2
+	AL[2,4] = Y11/2				# changed to +ve sign
 
 	return AL					# changed returning +ve AL (no longer return AL * (-1))
 
