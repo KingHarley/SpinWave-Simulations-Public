@@ -22,11 +22,11 @@ epsZero = 8.85 * 10 ** -12
 muZero = 4 * numpy.pi * 10 ** -7
 
 #Antenna Geometry
-wsignal = 810 * 10 ** -9				#changed antenna widths to smaller antenna
-wground = 450 * 10 ** -9
-wgap = 180 * 10 ** -9
+wsignal = 648 * 10 ** -9				#changed antenna widths to smaller antenna
+wground = 324 * 10 ** -9
+wgap = 334 * 10 ** -9
 length_Antenna = 20 * 10 ** -6
-distance_Antennas = -2.464 * 10 ** -6      #changed
+distance_Antennas = 2.464 * 10 ** -6      #changed
 
 #Setting up simulation points across Antenna
 pts_ground = 26
@@ -54,9 +54,9 @@ var_R2 = resis_Al / (thicknessAl * wground)
 var_zc = 50
 
 #Frequency range to test with Simulation
-freq_lower = 2 * numpy.pi * 7 * 10 ** 9
-freq_upper = 2 * numpy.pi * 18 * 10 ** 9
-plot_pts_num = 2
+freq_lower = 2 * numpy.pi * 12 * 10 ** 9
+freq_upper = 2 * numpy.pi * 24 * 10 ** 9
+plot_pts_num = 100
 if plot_pts_num > 1:
 	freq_step = (freq_upper - freq_lower) / (plot_pts_num -1)
 else:
@@ -65,13 +65,13 @@ else:
 
 #Independent Variables
 centralFreq = numpy.pi * (2 * 15 * 10 ** 9)
-appliedH =	600 * 1.02 * 79.57747		#1083.24 * 79.57747
-linewidthSlope = 5.66352 * 10 ** -9 * 79.57747 / (2*numpy.pi)
-broadening = 7.96526 * 79.57747
-gamma = 2 * numpy.pi * 2.87 * 10 ** 10 * 4 * numpy.pi * 10 ** -7#2 * numpy.pi * 3 * 10 ** 10 * 4 * numpy.pi * 10 ** -7
-ampMs =(17000 / (10 ** 4 * muZero)) #(19264 / (10 ** 4 * muZero))
-exchangeA = 1.78 * 10 ** -7 * 10 ** -4#2.625 * 10 ** -7 * 10 ** -4
-surface_Ks1 = 0*10**-3 #1*3.49266*10**-3					#changed
+appliedH =	1000 * 79.57747#600 * 1.02 * 79.57747
+linewidthSlope = 3.57 * 10 ** -9 * 79.57747 / (2*numpy.pi)
+broadening = 0*7.96526 * 79.57747
+gamma = 2 * numpy.pi * 3 * 10 ** 10 * 4 * numpy.pi * 10 ** -7
+ampMs =(20900 / (10 ** 4 * muZero)) #(19264 / (10 ** 4 * muZero))
+exchangeA = 2.625 * 10 ** -7 * 10 ** -4
+surface_Ks1 = 3*10**-3 #1*3.49266*10**-3					#changed
 surface_Ks2 = 0*10**-3 #1*3.49266*10**-3
 surface_Ds1 = 0 * 10 ** -12
 surface_Ds2 = 0
@@ -84,7 +84,7 @@ NAzz = 0.00260166
 NAyy = 1 - NAxx - NAzz
 
 #Bulk easy axis anisotropy
-Hubx = 1*40 * 79.57747
+Hubx = 0*40 * 79.57747
 Hubz = 0*100 * 79.57747
 
 def radians(x):
@@ -1292,8 +1292,8 @@ def create_JJI_bn_vec(eigVals, eigVecs):							# changed Exponents are + again. 
 	bn_second[0] = 0
 	bn_second[1] = 0
 	bn_second[2] = 0
-	bn_second[3] = 1
-	bn_second[4] = 1
+	bn_second[3] = 2
+	bn_second[4] = 2
 
 	result = numpy.dot(numpy.linalg.inv(bn_first), bn_second)
 	return result
@@ -2039,7 +2039,7 @@ def sim_varying_args(dir, Ycss, lowB, upB, pts, arg, **kwargs):
 		arg_dict.update(kwargs)
 		update_dict_vars(ind_Variables, arg_dict)
 		recompile_funcs()
-		myPool = Pool(initializer=update_dict_vars, initargs = (ind_Variables, arg_dict))
+		myPool = Pool(4, initializer=update_dict_vars, initargs = (ind_Variables, arg_dict))
 		simulate(myPool, Ycss, freq_lower, freq_upper, plot_pts_num, name)
 		myPool.close()
 		myPool.join()
@@ -2050,12 +2050,12 @@ def sim_varying_args(dir, Ycss, lowB, upB, pts, arg, **kwargs):
 	return 0
 
 def main():
-	directory = '/home/mumax/Documents/Charles/SpinWave-Simulations-Public/Python Simulation Results/Corrections20220515'
+	directory = "C:\source\SimulationResults\SupplementaryMaterials"
 	print("Start: antennaCalcs()")
 	var_time = time.time()
 	var_Ycss = antennaCalcs()
 	print(var_Ycss)
-	average_simulation_time = sim_varying_args(directory, var_Ycss,	-2.464 * 10 ** -6, +2.464 * 10 ** -6, 2, 'distance_Antennas', id="600Oe_corrected_20220515")
+	average_simulation_time = sim_varying_args(directory, var_Ycss, 3*10**-3, 3*10**-3, 1, 'surface_Ks1', id="corrected_+k_Ks2=0")
 	total_time = time.time() - var_time
 	numpy.savetxt(os.path.join(directory, "times.csv"), numpy.array(((average_simulation_time, total_time),)), delimiter = ",", header = "Average Simulation Time, Total Time")
 
